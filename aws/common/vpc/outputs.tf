@@ -13,6 +13,11 @@ output "vpc_id" {
   value       = aws_vpc.vpc.id
 }
 
+output "vpc_cidr_block" {
+  description = "The IPv4 CIDR block for the VPC."
+  value       = aws_vpc.vpc.cidr_block
+}
+
 output "main_route_table_id" {
   description = "The ID of the main route table associated with this VPC."
   value       = aws_vpc.vpc.main_route_table_id
