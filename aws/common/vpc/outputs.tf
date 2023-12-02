@@ -84,7 +84,7 @@ output "eips_public_dns" {
 }
 
 output "eips_public_ips" {
-  description = "Public DNS of Elastic IPss"
+  description = "Public DNS of Elastic IPs."
   value       = aws_eip.eips.*.public_ip
 }
 
