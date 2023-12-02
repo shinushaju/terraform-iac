@@ -11,7 +11,7 @@ variable "cidr_block" {
 }
 
 variable "instance_tenancy" {
-  description = "(Optional) A tenancy option for instances launched into the VPC. Valid values: [default, dedicated]"
+  description = "(Optional) A tenancy option for instances launched into the VPC. Valid values: [default, dedicated]."
   type        = string
   default     = "default"
 }
