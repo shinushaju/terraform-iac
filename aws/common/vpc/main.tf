@@ -7,11 +7,7 @@ resource "aws_vpc" "vpc" {
   enable_network_address_usage_metrics = var.enable_network_address_usage_metrics
   enable_dns_hostnames                 = var.enable_dns_hostnames
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? var.vpc_name : "terraform-vpc"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? var.vpc_name : "terraform-vpc" })
 }
 
 resource "aws_subnet" "private_subnets" {
@@ -21,22 +17,14 @@ resource "aws_subnet" "private_subnets" {
   map_public_ip_on_launch = false
   vpc_id                  = aws_vpc.vpc.id
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-private-subnet-${count.index}" : "terraform-vpc-private-subnet-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-private-subnet-${count.index}" : "terraform-vpc-private-subnet-${count.index}" })
 }
 
 resource "aws_eip" "eips" {
   count  = var.num_public_subnets > 0 ? var.num_private_subnets : 0
   domain = "vpc"
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-eip-${count.index}" : "terraform-eip-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-eip-${count.index}" : "terraform-eip-${count.index}" })
 }
 
 resource "aws_nat_gateway" "nat_gateways" {
@@ -44,22 +32,18 @@ resource "aws_nat_gateway" "nat_gateways" {
   allocation_id = element(aws_eip.eips.*.id, count.index)
   subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-nat-gateway-${count.index}" : "terraform-vpc-nat-gateway-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-nat-gateway-${count.index}" : "terraform-vpc-nat-gateway-${count.index}" })
+
+  depends_on = [
+    aws_internet_gateway.internet_gateway,
+  ]
 }
 
 resource "aws_route_table" "private_route_tables" {
   count  = var.num_private_subnets
   vpc_id = aws_vpc.vpc.id
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-private-route-table-${count.index}" : "terraform-vpc-private-route-table-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-private-route-table-${count.index}" : "terraform-vpc-private-route-table-${count.index}" })
 }
 
 resource "aws_route" "private_routes" {
@@ -82,33 +66,21 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.vpc.id
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-public-subnet-${count.index}" : "terraform-vpc-public-subnet-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-public-subnet-${count.index}" : "terraform-vpc-public-subnet-${count.index}" })
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
   count  = var.num_public_subnets > 0 ? 1 : 0
   vpc_id = aws_vpc.vpc.id
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-internet-gateway-${count.index}" : "terraform-vpc-internet-gateway-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-internet-gateway-${count.index}" : "terraform-vpc-internet-gateway-${count.index}" })
 }
 
 resource "aws_route_table" "public_route_tables" {
   count  = var.num_public_subnets
   vpc_id = aws_vpc.vpc.id
 
-  tags = merge(
-    {
-      Name = var.vpc_name != null ? "${var.vpc_name}-public-route-table-${count.index}" : "terraform-vpc-public-route-table-${count.index}"
-    }
-  )
+  tags = merge({ Name = var.vpc_name != null ? "${var.vpc_name}-public-route-table-${count.index}" : "terraform-vpc-public-route-table-${count.index}" })
 }
 
 resource "aws_route" "public_routes" {

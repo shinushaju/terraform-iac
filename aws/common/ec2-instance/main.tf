@@ -1,4 +1,5 @@
 data "aws_ami" "amazon_linux_2_ami" {
+  count       = var.ami == null ? 1 : 0
   most_recent = true
   owners      = ["amazon"]
   filter {
@@ -15,11 +16,16 @@ resource "tls_private_key" "tls_private_key" {
 }
 
 resource "aws_key_pair" "key_pair" {
-  public_key = var.public_key == null ? tls_private_key.tls_private_key.public_key_openssh : var.public_key
+  count      = var.public_key == null ? 1 : 0
+  public_key = var.public_key == null ? tls_private_key.tls_private_key[0].public_key_openssh : var.public_key
+
+  depends_on = [
+    tls_private_key.tls_private_key,
+  ]
 }
 
 resource "aws_instance" "instance" {
-  ami           = var.ami != null ? var.ami : aws_ami.amazon_linux_2_ami
+  ami           = var.ami != null ? var.ami : aws_ami.amazon_linux_2_ami[0].id
   instance_type = var.instance_type
   hibernation   = var.hibernation
 
@@ -30,7 +36,7 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = var.associate_public_ip_address
   private_ip                  = var.private_ip
 
-  key_name             = var.key_name != null ? var.key_name : aws_key_pair.key_pair.key_name
+  key_name             = var.key_name != null ? var.key_name : aws_key_pair.key_pair[0].key_name
   iam_instance_profile = var.iam_instance_profile
   monitoring           = var.monitoring
 
