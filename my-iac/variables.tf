@@ -1,3 +1,4 @@
+# Amazon VPC variables
 variable "vpc_name" {
   description = "(Optional) Amazon VPC name."
   type        = string
@@ -35,11 +36,12 @@ variable "vpc_num_public_subnets" {
 }
 
 variable "vpc_public_subnet_cidrs" {
-  type        = list(string)
   description = "(Optional) List of Amazon VPC public subnet CIDR values."
+  type        = list(string)
   default     = []
 }
 
+# Amazon EC2 instance variables
 variable "ec2_instance_enabled" {
   description = "If set to true, EC2 instance will be created."
   type        = bool

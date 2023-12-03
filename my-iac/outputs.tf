@@ -1,3 +1,4 @@
+# Amazon VPC outputs
 output "aws_availability_zones" {
   description = "List of all AWS Availability Zones which can be accessed within the region."
   value       = module.vpc.aws_availability_zones
@@ -13,6 +14,7 @@ output "vpc_cidr_block" {
   value       = module.vpc.vpc_cidr_block
 }
 
+# Amazon EC2 instance outputs
 output "ec2_instance_id" {
   description = "The ID of the EC2 instance."
   value       = module.ec2-instance.id

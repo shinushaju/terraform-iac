@@ -46,8 +46,8 @@ variable "num_private_subnets" {
 }
 
 variable "private_subnet_cidrs" {
-  type        = list(string)
   description = "(Optional) List of Amazon VPC private subnet CIDR values."
+  type        = list(string)
   default     = []
 }
 
@@ -57,7 +57,7 @@ variable "num_public_subnets" {
 }
 
 variable "public_subnet_cidrs" {
-  type        = list(string)
   description = "(Optional) List of Amazon VPC public subnet CIDR values."
+  type        = list(string)
   default     = []
 }
