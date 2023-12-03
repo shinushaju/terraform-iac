@@ -39,3 +39,33 @@ variable "vpc_public_subnet_cidrs" {
   description = "(Optional) List of Amazon VPC public subnet CIDR values."
   default     = []
 }
+
+variable "ec2_instance_enabled" {
+  description = "If set to true, EC2 instance will be created."
+  type        = bool
+  default     = false
+}
+
+variable "ec2_instance_count" {
+  description = "(Optional) Number of EC2 instances to be created. Variable ec2_instance_enabled must be set to true."
+  type        = number
+  default     = 1
+}
+
+variable "ec2_instance_name" {
+  description = "(Optional) Name for the EC2 instance."
+  type        = string
+  default     = "my-instance"
+}
+
+variable "ec2_instance_ami" {
+  description = "(Optional) AMI to use for the instance."
+  type        = string
+  default     = null
+}
+
+variable "ec2_instance_type" {
+  description = "(Optional) Instance type to use for the instance."
+  type        = string
+  default     = "t3.micro"
+}
